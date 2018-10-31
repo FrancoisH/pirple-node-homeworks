@@ -46,7 +46,7 @@ let serverLogic = (req, res) => {
   let decoder = new StringDecoder('utf-8');
   let reqBuffer = '';
 
-  // - Intercept data event
+  // - Intercept .data event
   req.on('data', (data) => reqBuffer += decoder.write(data));
 
   // - Intercept end of payload event and process the request
