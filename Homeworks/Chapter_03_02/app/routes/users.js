@@ -31,13 +31,38 @@ const _users = {};
  *               Create a user and hashes it's password
  */
 _users.post = (reqData, callback) => {
-  let firstName = validation.string(reqData.payload.firstName, 3, 20);
+  /** Create user object */
+  let userData = {
+    firstName : validation.string(reqData.payload.firstName, 2, 20, 'name'),
+    lastName  : validation.string(reqData.payload.lastName, 2, 30, 'name'),
+    address1  : validation.string(reqData.payload.address1, 5, 50, 'address'),
+    address2  : validation.string(reqData.payload.address2, 5, 50, 'address'),
+    // zip       : validation.zip(reqData.payload.zip, 'intl),
+    // phone     : validation.phone(reqData.payload.phone, 'intl'),
+    // mail      : validation.mail(reqData.payload.mail),
+    // password  : validation.password(reqData.payload.password, reqData.payload.passwordConf, 8, 16),
+    // consent   : validation.boolean(reqData.payload.consent)
+  };
 
-  if (firstName.result) {
-    callback(200, {firstName: firstName});
+  /** Create errors object */
+  let errorsData = {};
+
+  /** Check the user object and define final values or add error to the list */
+  for (let key in userData) {
+    if (!userData[key].result) {
+      errorsData[key] = userData[key].error;
+    } else {
+      userData[key] = userData[key].result;
+    }
+  }
+
+  /** Process if there's no error or return the errors if necessary */
+  if(Object.keys(errorsData).length === 0) {
+    callback(200, userData);
   } else {
-    callback(400, {error: firstName.error});
+    callback(400, {errors: errorsData});
   }
 };
+
 /** Module Export */
 module.exports = users;
