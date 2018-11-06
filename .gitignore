@@ -1,3 +1,4 @@
 
 .idea/
-Chapter_03/
+/Chapter_03/app/.data/
+/Chapter_03/app/.logs/
